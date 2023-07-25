@@ -40,12 +40,21 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
+
 </head>
 <body>
   <div id="loading" style="position: fixed; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div id="loading-icon"></div>
   </div>
   <h1 style="text-align: center; padding: 20px; background: #333; color: #fff;">ArtIA Smart Land</h1>
+
+  <!-- Aquí van los botones de inicio y cierre de sesión -->
+  <div style="text-align: center; margin-bottom: 20px;">
+    <button id="login">Iniciar sesión con Google</button>
+    <button id="logout" style="display: none;">Cerrar sesión</button>
+  </div>
+
   <form id="upload-form" style="display: flex; justify-content: center; padding: 20px;">
     <input type="file" id="image-upload" accept="image/*">
     <textarea id="image-description" placeholder="Describe la visión" style="margin-left: 10px;"></textarea>
@@ -55,6 +64,7 @@
   <div id="images"></div>
 
   <script>
+
     var firebaseConfig = {
       // Tu configuración de Firebase
   apiKey: "AIzaSyBSgKSxonhLn1rO2CVwP0nBdcGKNFj1C_Y",
@@ -130,6 +140,47 @@ db.collection("images").get().then(function(querySnapshot) {
   setTimeout(function() {
     document.getElementById('loading').style.display = 'none';
   }, 5000);  // delay time in milliseconds, 5000 ms = 5 seconds
+});
+
+    var provider = new firebase.auth.GoogleAuthProvider();
+
+document.getElementById('login').addEventListener('click', function() {
+  firebase.auth().signInWithPopup(provider).then(function(result) {
+    // Esto te da un token de acceso a Google, puedes usarlo para acceder a la API de Google.
+    var token = result.credential.accessToken;
+    // Los datos del usuario que inició sesión.
+    var user = result.user;
+    // ...
+  }).catch(function(error) {
+    // Maneja los errores aquí.
+    var errorCode = error.code;
+    var errorMessage = error.message;
+    // La cuenta del usuario del correo electrónico de la cuenta utilizada.
+    var email = error.email;
+    // El tipo firebase.auth.AuthCredential que se utilizó.
+    var credential = error.credential;
+    // ...
+  });
+});
+
+document.getElementById('logout').addEventListener('click', function() {
+  firebase.auth().signOut().then(function() {
+    // El cierre de sesión fue exitoso.
+  }).catch(function(error) {
+    // Ocurrió un error en el cierre de sesión.
+  });
+});
+
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // El usuario ha iniciado sesión.
+    document.getElementById('login').style.display = 'none';
+    document.getElementById('logout').style.display = 'block';
+  } else {
+    // El usuario ha cerrado sesión.
+    document.getElementById('login').style.display = 'block';
+    document.getElementById('logout').style.display = 'none';
+  }
 });
 
   </script>
