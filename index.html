@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ArtIA Smart Land</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f0f0f0;
+    }
+    #images {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 20px;
+    }
+    .image {
+      margin: 10px;
+      border: 2px solid #333;
+    }
+    .image img {
+      width: 200px;
+      height: auto;
+    }
+
+    #loading-icon {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+</head>
+<body>
+  <div id="loading" style="position: fixed; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
+    <div id="loading-icon"></div>
+  </div>
+  <h1 style="text-align: center; padding: 20px; background: #333; color: #fff;">ArtIA Smart Land</h1>
+  <form id="upload-form" style="display: flex; justify-content: center; padding: 20px;">
+    <input type="file" id="image-upload" accept="image/*">
+    <textarea id="image-description" placeholder="Describe la visión" style="margin-left: 10px;"></textarea>
+    <button type="submit" style="margin-left: 10px;">Subir</button>
+  </form>
+
+  <div id="images"></div>
+
+  <script>
+    var firebaseConfig = {
+      // Tu configuración de Firebase
+  apiKey: "AIzaSyBSgKSxonhLn1rO2CVwP0nBdcGKNFj1C_Y",
+  authDomain: "diario-ad840.firebaseapp.com",
+  databaseURL: "https://diario-ad840-default-rtdb.firebaseio.com",
+  projectId: "diario-ad840",
+  storageBucket: "diario-ad840.appspot.com",
+  messagingSenderId: "38131773754",
+  appId: "1:38131773754:web:bbe902bdbcce75a706e003"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    var db = firebase.firestore();
+    var form = document.getElementById('upload-form');
+    var fileInput = document.getElementById('image-upload');
+    var descInput = document.getElementById('image-description');
+    var imagesDiv = document.getElementById('images');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+      uploadImage(fileInput.files[0], descInput.value);
+      descInput.value = '';
+    });
+
+    function uploadImage(file, description) {
+      var storageRef = firebase.storage().ref();
+      var uploadTask = storageRef.child('images/' + file.name).put(file);
+
+      uploadTask.on('state_changed', function(snapshot) {
+        var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+        console.log('Upload is ' + progress + '% done');
+      }, function(error) {
+        console.error('Upload failed:', error);
+      }, function() {
+        uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+          db.collection("images").add({
+            url: downloadURL,
+            description: description
+          }).then(function(docRef) {
+            console.log("Document written with ID: ", docRef.id);
+            displayImage(downloadURL, description);
+          }).catch(function(error) {
+            console.error("Error adding document: ", error);
+          });
+        });
+      });
+    }
+
+    function displayImage(url, description) {
+      var div = document.createElement('div');
+      div.className = 'image';
+      var a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      var img = document.createElement('img');
+      img.src = url;
+      a.appendChild(img);
+      div.appendChild(a);
+      var p = document.createElement('p');
+      p.textContent = description;
+      div.appendChild(p);
+      imagesDiv.appendChild(div);
+    }
+
+ // Display images from Firestore on page load
+db.collection("images").get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {
+    console.log(doc.id, " => ", doc.data());
+    displayImage(doc.data().url, doc.data().description);
+  });
+  // Use setTimeout to delay hiding the loading icon
+  setTimeout(function() {
+    document.getElementById('loading').style.display = 'none';
+  }, 5000);  // delay time in milliseconds, 5000 ms = 5 seconds
+});
+
+  </script>
+</body>
+</html>
