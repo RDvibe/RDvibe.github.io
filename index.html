@@ -23,18 +23,6 @@
       width: 200px;
       height: auto;
     }
-    #loading-icon {
-      border: 16px solid #f3f3f3;
-      border-top: 16px solid #3498db;
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      animation: spin 2s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
   </style>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
@@ -42,9 +30,6 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
 </head>
 <body>
-  <div id="loading" style="position: fixed; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
-    <div id="loading-icon"></div>
-  </div>
   <h1 style="text-align: center; padding: 20px; background: #333; color: #fff;">ArtIA Smart Land</h1>
   <button id="sign-in-button" onclick="signInWithGoogle()">Iniciar sesión con Google</button>
   <form id="upload-form" style="display: flex; justify-content: center; padding: 20px;">
@@ -52,19 +37,17 @@
     <textarea id="image-description" placeholder="Describe la visión" style="margin-left: 10px;"></textarea>
     <button type="submit" style="margin-left: 10px;">Subir</button>
   </form>
-
   <div id="images"></div>
-
   <script>
     var firebaseConfig = {
       // Tu configuración de Firebase
-  apiKey: "AIzaSyBSgKSxonhLn1rO2CVwP0nBdcGKNFj1C_Y",
-  authDomain: "diario-ad840.firebaseapp.com",
-  databaseURL: "https://diario-ad840-default-rtdb.firebaseio.com",
-  projectId: "diario-ad840",
-  storageBucket: "diario-ad840.appspot.com",
-  messagingSenderId: "38131773754",
-  appId: "1:38131773754:web:bbe902bdbcce75a706e003"
+      apiKey: "AIzaSyBSgKSxonhLn1rO2CVwP0nBdcGKNFj1C_Y",
+      authDomain: "diario-ad840.firebaseapp.com",
+      databaseURL: "https://diario-ad840-default-rtdb.firebaseio.com",
+      projectId: "diario-ad840",
+      storageBucket: "diario-ad840.appspot.com",
+      messagingSenderId: "38131773754",
+      appId: "1:38131773754:web:bbe902bdbcce75a706e003"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -87,18 +70,14 @@
     }
 
     firebase.auth().onAuthStateChanged(function(user) {
-  var loadingElement = document.getElementById('loading');
-  if (user) {
-    // El usuario ha iniciado sesión.
-    loadingElement.style.display = 'none';
-    console.log('Usuario ha iniciado sesión:', user);
-  } else {
-    // El usuario no ha iniciado sesión.
-    loadingElement.style.display = 'flex';
-    console.log('Usuario no ha iniciado sesión.');
-  }
-});
-
+      if (user) {
+        // El usuario ha iniciado sesión.
+        console.log('Usuario ha iniciado sesión:', user);
+      } else {
+        // El usuario no ha iniciado sesión.
+        console.log('Usuario no ha iniciado sesión.');
+      }
+    });
 
     form.addEventListener('submit', function(e) {
       e.preventDefault();
@@ -160,4 +139,5 @@
   </script>
 </body>
 </html>
+
 
