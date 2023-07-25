@@ -41,7 +41,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
 </head>
 <body>
-  <div id="loading" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
+  <div id="loading" style="position: fixed; display: none; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div id="loading-icon"></div>
     <p id="loading-text" style="text-align: center;">Subiendo imagen, por favor espera...</p>
   </div>
@@ -52,6 +52,8 @@
     <button type="submit" style="margin-left: 10px;">Subir</button>
   </form>
   <div id="images"></div>
+</body>
+
 
   <script>
     var firebaseConfig = {
@@ -79,7 +81,7 @@
       descInput.value = '';
     });
 
-   function uploadImage(file, description) {
+function uploadImage(file, description) {
     // Muestra el mensaje de carga y cambia el texto
     document.getElementById('loading').style.display = 'flex';
     document.getElementById('loading-text').textContent = 'Subiendo imagen, por favor espera...';
@@ -97,24 +99,23 @@
         console.error('Upload failed:', error);
     }, function() {
         uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-            db.collection("images").add({
+            return db.collection("images").add({
                 url: downloadURL,
                 description: description
-            }).then(function(docRef) {
-                console.log("Document written with ID: ", docRef.id);
-                displayImage(downloadURL, description);
-                // Oculta el mensaje de carga una vez que la imagen ha sido subida y agregada a la base de datos y cambia el texto
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('loading-text').textContent = 'Cargando...';
-            }).catch(function(error) {
-                // Oculta el mensaje de carga en caso de error y cambia el texto
-                document.getElementById('loading').style.display = 'none';
-                document.getElementById('loading-text').textContent = 'Cargando...';
-                console.error("Error adding document: ", error);
             });
+        }).then(function(docRef) {
+            console.log("Document written with ID: ", docRef.id);
+            displayImage(docRef.data().url, docRef.data().description);
+        }).catch(function(error) {
+            console.error("Error adding document: ", error);
+        }).finally(function() {
+            // Oculta el mensaje de carga una vez que la imagen ha sido subida y agregada a la base de datos y cambia el texto
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('loading-text').textContent = 'Cargando...';
         });
     });
 }
+
 
 
     function displayImage(url, description) {
