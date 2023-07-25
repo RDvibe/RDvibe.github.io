@@ -86,6 +86,20 @@
       });
     }
 
+    firebase.auth().onAuthStateChanged(function(user) {
+  var loadingElement = document.getElementById('loading');
+  if (user) {
+    // El usuario ha iniciado sesión.
+    loadingElement.style.display = 'none';
+    console.log('Usuario ha iniciado sesión:', user);
+  } else {
+    // El usuario no ha iniciado sesión.
+    loadingElement.style.display = 'flex';
+    console.log('Usuario no ha iniciado sesión.');
+  }
+});
+
+
     form.addEventListener('submit', function(e) {
       e.preventDefault();
       if (firebase.auth().currentUser) {
