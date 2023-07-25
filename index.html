@@ -41,8 +41,9 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
 </head>
 <body>
-  <div id="loading" style="position: fixed; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
+  <div id="loading" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div id="loading-icon"></div>
+    <p id="loading-text" style="text-align: center;">Subiendo imagen, por favor espera...</p>
   </div>
   <h1 style="text-align: center; padding: 20px; background: #333; color: #fff;">ArtIA Smart Land</h1>
   <form id="upload-form" style="display: flex; justify-content: center; padding: 20px;">
@@ -50,7 +51,6 @@
     <textarea id="image-description" placeholder="Describe la visión" style="margin-left: 10px;"></textarea>
     <button type="submit" style="margin-left: 10px;">Subir</button>
   </form>
-
   <div id="images"></div>
 
   <script>
@@ -79,39 +79,42 @@
       descInput.value = '';
     });
 
-     function uploadImage(file, description) {
-      // Muestra el mensaje de carga
-      document.getElementById('loading').style.display = 'flex';
+   function uploadImage(file, description) {
+    // Muestra el mensaje de carga y cambia el texto
+    document.getElementById('loading').style.display = 'flex';
+    document.getElementById('loading-text').textContent = 'Subiendo imagen, por favor espera...';
 
-      var storageRef = firebase.storage().ref();
-      var uploadTask = storageRef.child('images/' + file.name).put(file);
+    var storageRef = firebase.storage().ref();
+    var uploadTask = storageRef.child('images/' + file.name).put(file);
 
-      uploadTask.on('state_changed', function(snapshot) {
+    uploadTask.on('state_changed', function(snapshot) {
         var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
         console.log('Upload is ' + progress + '% done');
-      }, function(error) {
-        // Oculta el mensaje de carga en caso de error
+    }, function(error) {
+        // Oculta el mensaje de carga en caso de error y cambia el texto
         document.getElementById('loading').style.display = 'none';
+        document.getElementById('loading-text').textContent = 'Cargando...';
         console.error('Upload failed:', error);
-      }, function() {
+    }, function() {
         uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-          db.collection("images").add({
-            url: downloadURL,
-            description: description
-          }).then(function(docRef) {
-            console.log("Document written with ID: ", docRef.id);
-            displayImage(downloadURL, description);
-            // Oculta el mensaje de carga una vez que la imagen ha sido subida y agregada a la base de datos
-            document.getElementById('loading').style.display = 'none';
-          }).catch(function(error) {
-            // Oculta el mensaje de carga en caso de error
-            document.getElementById('loading').style.display = 'none';
-            console.error("Error adding document: ", error);
-          });
+            db.collection("images").add({
+                url: downloadURL,
+                description: description
+            }).then(function(docRef) {
+                console.log("Document written with ID: ", docRef.id);
+                displayImage(downloadURL, description);
+                // Oculta el mensaje de carga una vez que la imagen ha sido subida y agregada a la base de datos y cambia el texto
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loading-text').textContent = 'Cargando...';
+            }).catch(function(error) {
+                // Oculta el mensaje de carga en caso de error y cambia el texto
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('loading-text').textContent = 'Cargando...';
+                console.error("Error adding document: ", error);
+            });
         });
-      });
-    }
-
+    });
+}
 
 
     function displayImage(url, description) {
