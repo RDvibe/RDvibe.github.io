@@ -132,18 +132,23 @@
     }
 
     // Display images from Firestore on page load
-    db.collection("images").get().then(function(querySnapshot) {
-      querySnapshot.forEach(function(doc) {
-        console.log(doc.id, " => ", doc.data());
-        displayImage(doc.data().url, doc.data().description);
-      });
-      // Oculta el mensaje de carga de página una vez que todas las imágenes hayan sido cargadas
-      document.getElementById('loading-page').style.display = 'none';
-    }).catch(function(error) {
-      console.error("Error getting documents: ", error);
-      // Si hay un error, también ocultamos 'loading-page'
-      document.getElementById('loading-page').style.display = 'none';
-    });
+db.collection("images").get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {
+    console.log(doc.id, " => ", doc.data());
+    displayImage(doc.data().url, doc.data().description);
+  });
+
+  // Agrega un retraso antes de ocultar el mensaje de carga de la página
+  setTimeout(function() {
+    document.getElementById('loading-page').style.display = 'none';
+  }, 3000);  // Delay in milliseconds
+
+}).catch(function(error) {
+  console.error("Error getting documents: ", error);
+  // Si hay un error, también ocultamos 'loading-page'
+  document.getElementById('loading-page').style.display = 'none';
+});
+
   </script>
 </body>
 </html>
