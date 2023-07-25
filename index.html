@@ -23,31 +23,48 @@
       width: 200px;
       height: auto;
     }
+
+    #loading-icon {
+      border: 16px solid #f3f3f3;
+      border-top: 16px solid #3498db;
+      border-radius: 50%;
+      width: 120px;
+      height: 120px;
+      animation: spin 2s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
 </head>
 <body>
+  <div id="loading" style="position: fixed; display: flex; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
+    <div id="loading-icon"></div>
+  </div>
   <h1 style="text-align: center; padding: 20px; background: #333; color: #fff;">ArtIA Smart Land</h1>
-  <button id="sign-in-button" onclick="signInWithGoogle()">Iniciar sesión con Google</button>
   <form id="upload-form" style="display: flex; justify-content: center; padding: 20px;">
     <input type="file" id="image-upload" accept="image/*">
     <textarea id="image-description" placeholder="Describe la visión" style="margin-left: 10px;"></textarea>
     <button type="submit" style="margin-left: 10px;">Subir</button>
   </form>
+
   <div id="images"></div>
+
   <script>
     var firebaseConfig = {
       // Tu configuración de Firebase
-      apiKey: "AIzaSyBSgKSxonhLn1rO2CVwP0nBdcGKNFj1C_Y",
-      authDomain: "diario-ad840.firebaseapp.com",
-      databaseURL: "https://diario-ad840-default-rtdb.firebaseio.com",
-      projectId: "diario-ad840",
-      storageBucket: "diario-ad840.appspot.com",
-      messagingSenderId: "38131773754",
-      appId: "1:38131773754:web:bbe902bdbcce75a706e003"
+  apiKey: "AIzaSyBSgKSxonhLn1rO2CVwP0nBdcGKNFj1C_Y",
+  authDomain: "diario-ad840.firebaseapp.com",
+  databaseURL: "https://diario-ad840-default-rtdb.firebaseio.com",
+  projectId: "diario-ad840",
+  storageBucket: "diario-ad840.appspot.com",
+  messagingSenderId: "38131773754",
+  appId: "1:38131773754:web:bbe902bdbcce75a706e003"
     };
 
     firebase.initializeApp(firebaseConfig);
@@ -58,35 +75,10 @@
     var descInput = document.getElementById('image-description');
     var imagesDiv = document.getElementById('images');
 
-    function signInWithGoogle() {
-      var provider = new firebase.auth.GoogleAuthProvider();
-      firebase.auth().signInWithPopup(provider).then(function(result) {
-        var token = result.credential.accessToken;
-        var user = result.user;
-        console.log('Usuario ha iniciado sesión con Google:', user);
-      }).catch(function(error) {
-        console.error('Error durante inicio de sesión con Google:', error);
-      });
-    }
-
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // El usuario ha iniciado sesión.
-        console.log('Usuario ha iniciado sesión:', user);
-      } else {
-        // El usuario no ha iniciado sesión.
-        console.log('Usuario no ha iniciado sesión.');
-      }
-    });
-
     form.addEventListener('submit', function(e) {
       e.preventDefault();
-      if (firebase.auth().currentUser) {
-        uploadImage(fileInput.files[0], descInput.value);
-        descInput.value = '';
-      } else {
-        console.log('Debe iniciar sesión para subir imágenes.');
-      }
+      uploadImage(fileInput.files[0], descInput.value);
+      descInput.value = '';
     });
 
     function uploadImage(file, description) {
@@ -102,10 +94,10 @@
         uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
           db.collection("images").add({
             url: downloadURL,
-            description: description,
-            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+            description: description
           }).then(function(docRef) {
             console.log("Document written with ID: ", docRef.id);
+            displayImage(downloadURL, description);
           }).catch(function(error) {
             console.error("Error adding document: ", error);
           });
@@ -113,31 +105,35 @@
       });
     }
 
-    db.collection("images").orderBy('timestamp', 'desc').onSnapshot(function(snapshot) {
-      snapshot.docChanges().forEach(function(change) {
-        if (change.type === "added") {
-          if (firebase.auth().currentUser) {
-            displayImage(change.doc.data().url, change.doc.data().description);
-          } else {
-            console.log('Debe iniciar sesión para ver las imágenes.');
-          }
-        }
-      });
-    });
-
     function displayImage(url, description) {
       var div = document.createElement('div');
-      div.classList.add('image');
+      div.className = 'image';
+      var a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
       var img = document.createElement('img');
       img.src = url;
+      a.appendChild(img);
+      div.appendChild(a);
       var p = document.createElement('p');
       p.textContent = description;
-      div.appendChild(img);
       div.appendChild(p);
-      imagesDiv.prepend(div);
+      imagesDiv.appendChild(div);
     }
+
+ // Display images from Firestore on page load
+db.collection("images").get().then(function(querySnapshot) {
+  querySnapshot.forEach(function(doc) {
+    console.log(doc.id, " => ", doc.data());
+    displayImage(doc.data().url, doc.data().description);
+  });
+  // Use setTimeout to delay hiding the loading icon
+  setTimeout(function() {
+    document.getElementById('loading').style.display = 'none';
+  }, 5000);  // delay time in milliseconds, 5000 ms = 5 seconds
+});
+
   </script>
 </body>
 </html>
-
 
