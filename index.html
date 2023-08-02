@@ -108,44 +108,62 @@
       appId: "1:38131773754:web:bbe902bdbcce75a706e003"
     };
 
-    firebase.initializeApp(firebaseConfig);
-     var provider = new firebase.auth.GoogleAuthProvider();
+   firebase.initializeApp(firebaseConfig);
+var provider = new firebase.auth.GoogleAuthProvider();
 
-    document.getElementById('sign-in-button').addEventListener('click', function() {
-      firebase.auth().signInWithPopup(provider);
-    });
+document.getElementById('sign-in-button').addEventListener('click', function() {
+  firebase.auth().signInWithRedirect(provider);
+});
 
-    document.getElementById('sign-out-button').addEventListener('click', function() {
-      firebase.auth().signOut();
-    });
+firebase.auth().getRedirectResult().then(function(result) {
+  if (result.credential) {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    var token = result.credential.accessToken;
+    // The signed-in user info.
+    var user = result.user;
+  }
+}).catch(function(error) {
+  // Handle Errors here.
+  var errorCode = error.code;
+  var errorMessage = error.message;
+  // The email of the user's account used.
+  var email = error.email;
+  // The firebase.auth.AuthCredential type that was used.
+  var credential = error.credential;
+});
 
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        // User is signed in.
-        document.getElementById('user-details').textContent = 'Hola ' + user.displayName;
-        document.getElementById('sign-in-button').style.display = 'none';
-        document.getElementById('sign-out-button').style.display = 'block';
-        document.getElementById('upload-form').style.display = 'flex';
-      } else {
-        // No user is signed in.
-        document.getElementById('user-details').textContent = '';
-        document.getElementById('sign-in-button').style.display = 'block';
-        document.getElementById('sign-out-button').style.display = 'none';
-        document.getElementById('upload-form').style.display = 'none';
-      }
-    });
+document.getElementById('sign-out-button').addEventListener('click', function() {
+  firebase.auth().signOut();
+});
 
-    var db = firebase.firestore();
-    var form = document.getElementById('upload-form');
-    var fileInput = document.getElementById('image-upload');
-    var descInput = document.getElementById('image-description');
-    var imagesDiv = document.getElementById('images');
+firebase.auth().onAuthStateChanged(function(user) {
+  if (user) {
+    // User is signed in.
+    document.getElementById('user-details').textContent = 'Hola ' + user.displayName;
+    document.getElementById('sign-in-button').style.display = 'none';
+    document.getElementById('sign-out-button').style.display = 'block';
+    document.getElementById('upload-form').style.display = 'flex';
+  } else {
+    // No user is signed in.
+    document.getElementById('user-details').textContent = '';
+    document.getElementById('sign-in-button').style.display = 'block';
+    document.getElementById('sign-out-button').style.display = 'none';
+    document.getElementById('upload-form').style.display = 'none';
+  }
+});
 
-    form.addEventListener('submit', function(e) {
-      e.preventDefault();
-      uploadImage(fileInput.files[0], descInput.value);
-      descInput.value = '';
-    });
+var db = firebase.firestore();
+var form = document.getElementById('upload-form');
+var fileInput = document.getElementById('image-upload');
+var descInput = document.getElementById('image-description');
+var imagesDiv = document.getElementById('images');
+
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  uploadImage(fileInput.files[0], descInput.value);
+  descInput.value = '';
+});
+
 
     function uploadImage(file, description) {
       // Muestra el mensaje de carga de subida
