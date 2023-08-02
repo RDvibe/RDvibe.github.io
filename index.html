@@ -37,19 +37,28 @@
     }
   </style>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
+   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-auth.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
+ 
+
 </head>
 <body>
+
   <div id="loading-page" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div class="loading-icon"></div>
     <p class="loading-text" style="text-align: center; font-size: 2em;">Cargando página, por favor espera...</p>
   </div>
-  </div>
+
+  <div id="user-details"></div>
+  <button id="sign-in-button" style="display: none;">Iniciar sesión con Google</button>
+  <button id="sign-out-button" style="display: none;">Cerrar sesión</button>
+
   <div id="loading-upload" style="position: fixed; display: none; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div class="loading-icon"></div>
     <p class="loading-text" style="text-align: center;">Subiendo imagen, por favor espera...</p>
   </div>
+
   <h1 style="text-align: center; padding: 20px; background: #333; color: #fff;">Galeria colectiva By RD art</h1>
 
   <div style="text-align: center; padding: 20px; font-family: 'Georgia', serif;">
@@ -100,6 +109,31 @@
     };
 
     firebase.initializeApp(firebaseConfig);
+     var provider = new firebase.auth.GoogleAuthProvider();
+
+    document.getElementById('sign-in-button').addEventListener('click', function() {
+      firebase.auth().signInWithPopup(provider);
+    });
+
+    document.getElementById('sign-out-button').addEventListener('click', function() {
+      firebase.auth().signOut();
+    });
+
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+        document.getElementById('user-details').textContent = 'Hola ' + user.displayName;
+        document.getElementById('sign-in-button').style.display = 'none';
+        document.getElementById('sign-out-button').style.display = 'block';
+        document.getElementById('upload-form').style.display = 'flex';
+      } else {
+        // No user is signed in.
+        document.getElementById('user-details').textContent = '';
+        document.getElementById('sign-in-button').style.display = 'block';
+        document.getElementById('sign-out-button').style.display = 'none';
+        document.getElementById('upload-form').style.display = 'none';
+      }
+    });
 
     var db = firebase.firestore();
     var form = document.getElementById('upload-form');
