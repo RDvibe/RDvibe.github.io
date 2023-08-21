@@ -30,14 +30,14 @@
       text-align: center;  /* Centra horizontalmente el texto en el botón */
     }
 
-    loading-icon {
-      border: 16px solid #f3f3f3;
-      border-top: 16px solid #3498db;
-      border-radius: 50%;
-      width: 120px;
-      height: 120px;
-      animation: spin 2s linear infinite;
-    }
+   .loading-icon {
+  border: 16px solid #f3f3f3;
+  border-top: 16px solid #3498db;
+  border-radius: 50%;
+  width: 120px;
+  height: 120px;
+  animation: spin 2s linear infinite;
+}
 
     @keyframes spin {
       0% { transform: rotate(0deg); }
@@ -78,9 +78,10 @@
   <button id="sign-out-button" style="display: none;">Cerrar sesión</button>
 
   <div id="loading-upload" style="position: fixed; display: none; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
-    <div class="loading-icon"></div>
-    <p class="loading-text" style="text-align: center;">Subiendo imagen, por favor espera...</p>
-  </div>
+  <div class="loading-icon"></div> <!-- Esto muestra el ícono de carga -->
+  <p class="loading-text" style="text-align: center; font-size: 2em;">Subiendo imagen, por favor espera...</p>
+</div>
+
 
   <h1 style="text-align: center; padding: 20px; background: #333; color: #fff;"> ArtIA Smart Land By RD art</h1>
 
