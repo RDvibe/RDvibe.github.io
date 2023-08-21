@@ -30,7 +30,7 @@
       text-align: center;  /* Centra horizontalmente el texto en el botón */
     }
 
-    #loading-icon {
+    loading-icon {
       border: 16px solid #f3f3f3;
       border-top: 16px solid #3498db;
       border-radius: 50%;
@@ -67,10 +67,11 @@
     <div style="text-align: center;">
     <img id="logo" class="logo-size hidden" alt="ArtIA Logo" />
 </div>
-  <div id="loading-page" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
-    <div class="loading-icon"></div>
-    <p class="loading-text" style="text-align: center; font-size: 2em;">Cargando página, por favor espera...</p>
-  </div>
+<div id="loading-page" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
+  <div class="loading-icon"></div>
+  <p class="loading-text" style="text-align: center; font-size: 2em;">Cargando página, por favor espera...</p>
+</div>
+
 
   <div id="user-details"></div>
   <button id="sign-in-button" style="display: none;">Iniciar sesión con Google</button>
