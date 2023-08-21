@@ -253,7 +253,7 @@ db.collection("images").get().then(function(querySnapshot) {
   // Agrega un retraso antes de ocultar el mensaje de carga de la página
   setTimeout(function() {
     document.getElementById('loading-page').style.display = 'none';
-  }, 4000);  // Delay in milliseconds
+  }, 3000);  // Delay in milliseconds
 
 }).catch(function(error) {
   console.error("Error getting documents: ", error);
