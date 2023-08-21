@@ -1,6 +1,6 @@
 <head>
   <title> ArtIA Smart Land</title>
-  <style>
+ <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -23,13 +23,12 @@
     }
 
     #sign-in-button, #sign-out-button {
-  width: 350px;  /* Ancho del botón */
-  height: 100px;  /* Altura del botón */
-  font-size: 30px;  /* Tamaño de la fuente del botón */
-  line-height: 100px;  /* Centra verticalmente el texto en el botón */
-  text-align: center;  /* Centra horizontalmente el texto en el botón */
-}
-
+      width: 350px;  /* Ancho del botón */
+      height: 100px;  /* Altura del botón */
+      font-size: 30px;  /* Tamaño de la fuente del botón */
+      line-height: 100px;  /* Centra verticalmente el texto en el botón */
+      text-align: center;  /* Centra horizontalmente el texto en el botón */
+    }
 
     #loading-icon {
       border: 16px solid #f3f3f3;
@@ -44,7 +43,13 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-  </style>
+
+    .logo-size {
+      width: 150px; /* Puedes ajustar este valor según tus necesidades */
+      height: auto; /* Esto mantiene la proporción del logotipo */
+    }
+</style>
+
 </head>
 
 
@@ -57,8 +62,8 @@
 </head>
 <body>
     <div style="text-align: center;">
-    <img id="logo" alt="ArtIA Logo" style="max-width: 30%;" />
-  </div>
+  <img id="logo" class="logo-size" alt="ArtIA Logo" />
+</div>
   <div id="loading-page" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div class="loading-icon"></div>
     <p class="loading-text" style="text-align: center; font-size: 2em;">Cargando página, por favor espera...</p>
