@@ -255,7 +255,7 @@ db.collection("images").get().then(function(querySnapshot) {
 });
 // Referencia a tu logo en Firebase Storage
 var storageRef = firebase.storage().ref();
-var logoRef = storageRef.child('gs://diario-ad840.appspot.com/RD_art_Elegant_luxurious_and_royal_corporate_logo_of_a_majestic_db652951-68b5-488b-a7ef-afed1f20a04b.png'); // Cambia a la ruta correcta en tu Firebase Storage
+var logoRef = storageRef.child('var logoRef = storageRef.child('RD_art_Elegant_luxurious_and_royal_corporate_logo_of_a_majestic_db652951-68b5-488b-a7ef-afed1f20a04b.png');// Cambia a la ruta correcta en tu Firebase Storage
 
 // Obtén la URL de descarga y asigna al atributo 'src' de la etiqueta de imagen
 logoRef.getDownloadURL().then(function(url) {
