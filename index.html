@@ -48,6 +48,9 @@
       width: 150px; /* Puedes ajustar este valor según tus necesidades */
       height: auto; /* Esto mantiene la proporción del logotipo */
     }
+   .hidden {
+  display: none;
+}
 </style>
 
 </head>
@@ -62,7 +65,7 @@
 </head>
 <body>
     <div style="text-align: center;">
-  <img id="logo" class="logo-size" alt="ArtIA Logo" />
+    <img id="logo" class="logo-size hidden" alt="ArtIA Logo" />
 </div>
   <div id="loading-page" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div class="loading-icon"></div>
@@ -264,6 +267,10 @@ db.collection("images").get().then(function(querySnapshot) {
     }).catch(function (error) {
       console.error('Error al cargar el logo:', error);
     });
+    window.addEventListener('load', function() {
+  document.getElementById('logo').classList.remove('hidden');
+});
+
   </script>
 </body>
 </html>
