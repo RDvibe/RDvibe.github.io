@@ -56,9 +56,7 @@
 
 </head>
 <body>
-  <div style="text-align: center;">
-    <img id="logo" alt="ArtIA Logo" style="max-width: 100%;"/>
-  </div>
+ 
 
   <div id="loading-page" style="position: fixed; display: flex; flex-direction: column; justify-content: center; align-items: center; width: 100vw; height: 100vh; background: #fff; z-index: 100;">
     <div class="loading-icon"></div>
@@ -253,18 +251,6 @@ db.collection("images").get().then(function(querySnapshot) {
   // Si hay un error, también ocultamos 'loading-page'
   document.getElementById('loading-page').style.display = 'none';
 });
-// Referencia a tu logo en Firebase Storage
-var storageRef = firebase.storage().ref();
-var logoRef = storageRef.child('var logoRef = storageRef.child('RD_art_Elegant_luxurious_and_royal_corporate_logo_of_a_majestic_db652951-68b5-488b-a7ef-afed1f20a04b.png');// Cambia a la ruta correcta en tu Firebase Storage
-
-// Obtén la URL de descarga y asigna al atributo 'src' de la etiqueta de imagen
-logoRef.getDownloadURL().then(function(url) {
-  document.getElementById('logo').src = url;
-}).catch(function(error) {
-  console.error('Error al cargar el logo:', error);
-});
-
-
   </script>
 </body>
 </html>
