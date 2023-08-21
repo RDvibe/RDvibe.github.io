@@ -260,16 +260,18 @@ db.collection("images").get().then(function(querySnapshot) {
   // Si hay un error, también ocultamos 'loading-page'
   document.getElementById('loading-page').style.display = 'none';
 });
-    var storageRef = firebase.storage().ref();
-    var logoRef = storageRef.child('RD_art_Elegant_luxurious_and_royal_corporate_logo_of_a_majestic_db652951-68b5-488b-a7ef-afed1f20a04b.png');
-    logoRef.getDownloadURL().then(function (url) {
-      document.getElementById('logo').src = url;
-    }).catch(function (error) {
-      console.error('Error al cargar el logo:', error);
-    });
-    window.addEventListener('load', function() {
-  document.getElementById('logo').classList.remove('hidden');
+var storageRef = firebase.storage().ref();
+var logoRef = storageRef.child('RD_art_Elegant_luxurious_and_royal_corporate_logo_of_a_majestic_db652951-68b5-488b-a7ef-afed1f20a04b.png');
+logoRef.getDownloadURL().then(function (url) {
+  var logo = document.getElementById('logo');
+  logo.src = url;
+  logo.onload = function() {
+    logo.classList.remove('hidden');
+  };
+}).catch(function (error) {
+  console.error('Error al cargar el logo:', error);
 });
+
 
   </script>
 </body>
