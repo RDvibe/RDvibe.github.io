@@ -209,12 +209,14 @@ function uploadImage(file, description) {
         description: description
       });
     }).then(function(docRef) {
-      console.log("Document written with ID: ", docRef.id);
-      displayImage(docRef.data().url, docRef.data().description);
-      
+      // Obtiene los datos del documento para mostrar la imagen
+      docRef.get().then(function(doc) {
+        console.log("Document written with ID: ", docRef.id);
+        displayImage(doc.data().url, doc.data().description);
+      });
+    }).then(function() {
       // Actualiza automáticamente la página para reflejar la nueva imagen
       location.reload();
-      
     }).catch(function(error) {
       console.error("Error adding document: ", error);
     }).finally(function() {
