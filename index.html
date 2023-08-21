@@ -188,7 +188,9 @@ form.addEventListener('submit', function(e) {
 });
 
 function uploadImage(file, description) {
+  // Muestra el mensaje de carga de subida
   document.getElementById('loading-upload').style.display = 'flex';
+
   var storageRef = firebase.storage().ref();
   var uploadTask = storageRef.child('images/' + file.name).put(file);
 
@@ -196,6 +198,7 @@ function uploadImage(file, description) {
     var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
     console.log('Upload is ' + progress + '% done');
   }, function(error) {
+    // Oculta el mensaje de carga en caso de error
     document.getElementById('loading-upload').style.display = 'none';
     console.error('Upload failed:', error);
   }, function() {
@@ -207,13 +210,19 @@ function uploadImage(file, description) {
     }).then(function(docRef) {
       console.log("Document written with ID: ", docRef.id);
       displayImage(docRef.data().url, docRef.data().description);
+      
+      // Actualiza automáticamente la página para reflejar la nueva imagen
+      location.reload();
+      
     }).catch(function(error) {
       console.error("Error adding document: ", error);
     }).finally(function() {
+      // Oculta el mensaje de carga una vez que la imagen ha sido subida y agregada a la base de datos
       document.getElementById('loading-upload').style.display = 'none';
     });
   });
 }
+
 
 function displayImage(url, description) {
   var div = document.createElement('div');
