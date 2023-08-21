@@ -253,7 +253,7 @@ db.collection("images").get().then(function(querySnapshot) {
   // Agrega un retraso antes de ocultar el mensaje de carga de la página
   setTimeout(function() {
     document.getElementById('loading-page').style.display = 'none';
-  }, 3000);  // Delay in milliseconds
+  }, 4000);  // Delay in milliseconds
 
 }).catch(function(error) {
   console.error("Error getting documents: ", error);
@@ -271,8 +271,6 @@ logoRef.getDownloadURL().then(function (url) {
 }).catch(function (error) {
   console.error('Error al cargar el logo:', error);
 });
-
-
   </script>
 </body>
 </html>
