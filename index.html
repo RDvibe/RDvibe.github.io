@@ -231,17 +231,15 @@ function uploadImage(file, description) {
         displayImage(doc.data().url, doc.data().description);
       });
     }).then(function() {
+      // Oculta automáticamente el mensaje de carga una vez que la imagen ha sido subida y agregada a la base de datos
+      document.getElementById('loading-upload').style.display = 'none';
       // Actualiza automáticamente la página para reflejar la nueva imagen
       location.reload();
     }).catch(function(error) {
       console.error("Error adding document: ", error);
-    }).finally(function() {
-      // Oculta el mensaje de carga una vez que la imagen ha sido subida y agregada a la base de datos
-      document.getElementById('loading-upload').style.display = 'none';
     });
   });
 }
-
 
 function displayImage(url, description) {
   var div = document.createElement('div');
