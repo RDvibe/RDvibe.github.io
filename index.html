@@ -1,9 +1,11 @@
 
- <head>
+<!DOCTYPE html>
+<html lang="es">
+<head>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> ArtIA Smart Land</title>
- <style>
-     @media only screen and (max-width: 600px) {
+  <title>ArtIA Smart Land</title>
+  <style>
+    @media only screen and (max-width: 600px) {
       .loading-text {
         font-size: 1.5em;
       }
@@ -25,10 +27,9 @@
       border: 2px solid #333;
     }
     .image img {
-      width: 300;
+      width: 300px;
       height: auto;
     }
-
     #sign-in-button, #sign-out-button {
       width: 350px;  /* Ancho del botón */
       height: 100px;  /* Altura del botón */
@@ -36,7 +37,6 @@
       line-height: 100px;  /* Centra verticalmente el texto en el botón */
       text-align: center;  /* Centra horizontalmente el texto en el botón */
     }
-
     #loading-upload {
       position: fixed;
       display: flex;
@@ -48,7 +48,6 @@
       background: #fff;
       z-index: 100;
     }
-
     .loading-icon {
       border: 16px solid #f3f3f3;
       border-top: 16px solid #3498db;
@@ -57,17 +56,21 @@
       height: 222px;
       animation: spin 2s linear infinite;
     }
-
     @keyframes spin {
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
-
     .logo-size {
       width: 150px; /* Puedes ajustar este valor según tus necesidades */
       height: auto; /* Esto mantiene la proporción del logotipo */
     }
     .hidden {
+      display: none;
+    }
+    #main-content {
+      display: block;
+    }
+    #loading-upload.active {
       display: none;
     }
 </style>
