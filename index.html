@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ArtIA Smart Land</title>
   <style>
+    .hidden-page {
+      display: none;
+    }
     @media only screen and (max-width: 600px) {
       .loading-text {
         font-size: 1.5em;
@@ -79,7 +82,7 @@
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-storage.js"></script>
   <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-firestore.js"></script>
 </head>
-<body>
+<body class="hidden-page">
     <div style="text-align: center;">
     <img id="logo" class="logo-size hidden" alt="ArtIA Logo" />
 </div>
