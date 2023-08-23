@@ -277,7 +277,7 @@ db.collection("images").get().then(function(querySnapshot) {
     }).catch(function (error) {
       console.error('Error al cargar el logo:', error);
     });
-  }, 5000);
+  }, 3000);
 }).catch(function(error) {
   console.error("Error getting documents: ", error);
   document.getElementById('loading-page').style.display = 'none';
